@@ -66,7 +66,7 @@ Here is an example of API declaration with Zodios.
 in a common directory (ex: `src/common/api.ts`) :
 
 ```typescript
-import { Zodios } from "@zodios/core";
+import { asApi } from "@zodios/core";
 import { z } from "zod";
 
 const userApi = asApi([
