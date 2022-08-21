@@ -1,7 +1,7 @@
 import express from "express";
 import request from "supertest";
 import z from "zod";
-import { apiBuilder } from "@zodios/core";
+import { apiBuilder, asErrors, EndpointError } from "@zodios/core";
 import { zodiosApp, zodiosRouter } from "./zodios";
 
 const user = z.object({
@@ -9,6 +9,20 @@ const user = z.object({
   name: z.string(),
   email: z.string().email(),
 });
+
+const errors = asErrors([
+  {
+    status: "default",
+    schema: z.object({
+      error: z.object({
+        code: z.string(),
+        message: z.string(),
+      }),
+    }),
+  },
+]);
+
+type Test = EndpointError<typeof userApi, "get", "/users/:id", 407>;
 
 const userApi = apiBuilder({
   method: "get",
@@ -26,11 +40,13 @@ const userApi = apiBuilder({
     },
   ],
   response: z.array(user),
+  errors,
 })
   .addEndpoint({
     method: "get",
     path: "/users/:id",
     response: user,
+    errors,
   })
   .addEndpoint({
     method: "post",
@@ -67,6 +83,14 @@ describe("router", () => {
   it("should get one user", async () => {
     const app = zodiosApp(userApi);
     app.get("/users/:id", (req, res, next) => {
+      if (+req.params.id >= 10) {
+        return res.status(404).json({
+          error: {
+            code: "NOT_FOUND",
+            message: "User not found",
+          },
+        });
+      }
       res.json({
         id: +req.params.id,
         name: "john doe",
@@ -79,6 +103,33 @@ describe("router", () => {
       id: 3,
       name: "john doe",
       email: "test@domain.com",
+    });
+  });
+
+  it("should not find user if id>10", async () => {
+    const app = zodiosApp(userApi);
+    app.get("/users/:id", (req, res, next) => {
+      if (+req.params.id >= 10) {
+        return res.status(404).json({
+          error: {
+            code: "NOT_FOUND",
+            message: "User not found",
+          },
+        });
+      }
+      res.json({
+        id: +req.params.id,
+        name: "john doe",
+        email: "test@domain.com",
+      });
+    });
+    const req = request(app);
+    const result = await req.get("/users/10").expect(404);
+    expect(result.body).toEqual({
+      error: {
+        code: "NOT_FOUND",
+        message: "User not found",
+      },
     });
   });
 

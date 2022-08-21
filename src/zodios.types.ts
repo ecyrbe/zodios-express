@@ -1,5 +1,5 @@
-import express, { RequestHandler } from "express";
-import { ZodiosEnpointDescriptions } from "@zodios/core";
+import express from "express";
+import { ZodiosEnpointDescriptions, EndpointError } from "@zodios/core";
 import { IfEquals } from "@zodios/core/lib/utils.types";
 import {
   Response,
@@ -10,20 +10,43 @@ import {
   Method,
 } from "@zodios/core/lib/zodios.types";
 
+type SucessCodes = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
+
+export interface RequestHandler<
+  Api extends ZodiosEnpointDescriptions,
+  M extends Method,
+  Path extends Paths<Api, M>,
+  ReqPath = PathParams<Path>,
+  ReqBody = Body<Api, M, Path>,
+  ReqQuery = QueryParams<Api, M, Path>,
+  Res = Response<Api, M, Path>
+> {
+  (
+    req: express.Request<ReqPath, Res, ReqBody, ReqQuery>,
+    res: Omit<express.Response<Res>, "status"> & {
+      // rebind context to allow for type inference
+      status<
+        StatusCode extends number,
+        API extends unknown[] = Api,
+        METHOD extends Method = M,
+        PATH = Path
+      >(
+        status: StatusCode
+      ): StatusCode extends SucessCodes
+        ? express.Response<Res>
+        : express.Response<EndpointError<API, METHOD, PATH, StatusCode>>;
+    },
+    next: express.NextFunction
+  ): void;
+}
+
 export type ZodiosHandler<
   Router,
   Api extends ZodiosEnpointDescriptions,
   M extends Method
 > = <Path extends Paths<Api, M>>(
   path: Path,
-  ...handlers: Array<
-    RequestHandler<
-      PathParams<Path>,
-      Response<Api, M, Path>,
-      Body<Api, M, Path>,
-      QueryParams<Api, M, Path>
-    >
-  >
+  ...handlers: Array<RequestHandler<Api, M, Path>>
 ) => Router;
 
 export interface ZodiosUse {
