@@ -41,6 +41,7 @@ It's an express adapter for zodios that helps you type your express routes.
 - [How to use it ?](#how-to-use-it-)
   - [`zodiosApp` : Declare your API for fullstack end to end type safety](#zodiosapp--declare-your-api-for-fullstack-end-to-end-type-safety)
   - [`zodiosRouter` : Split your application with multiple routers](#zodiosrouter--split-your-application-with-multiple-routers)
+  - [Error Handling](#error-handling)
 - [Roadmap](#roadmap)
 
 # Install
@@ -138,9 +139,74 @@ const app.use(userRouter,adminRouter);
 
 app.listen(3000);
 ```
+## Error Handling
+
+Zodios express can infer the status code to match your API error response and also have your errors correctly typed.
+
+```typescript
+import { asApi } from "@zodios/core";
+import { zodiosApp } from "@zodios/express";
+import { z } from "zod";
+
+const userApi = asApi([
+  {
+    method: "get",
+    path: "/users/:id", // auto detect :id and ask for it in apiClient get params
+    alias: "getUser", // optionnal alias to call this endpoint with it
+    description: "Get a user",
+    response: z.object({
+      id: z.number(),
+      name: z.string(),
+    }),
+    errors: [
+      {
+        status: 404,
+        response: z.object({
+          code: z.string(),
+          message: z.string(),
+          id: z.number(),
+        }),
+      }, {
+        status: 'default', // default status code will be used if error is not 404
+        response: z.object({
+          code: z.string(),
+          message: z.string(),
+        }),
+      },
+    ],
+  },
+]);
+
+const app = zodiosApp(userApi);
+app.get("/users/:id", (req, res) => {
+  try {
+    const id = +req.params.id;
+    const user = service.findUser(id);
+    if(!user) {
+      // match error 404 schema with auto-completion
+      res.status(404).json({
+        code: "USER_NOT_FOUND",
+        message: "User not found",
+        id, // compile time error if you forget to add id
+      });
+    } else {
+      // match response schema with auto-completion
+      res.json(user);
+    }
+  } catch(err) {
+    // match default error schema with auto-completion
+    res.status(500).json({
+      code: "INTERNAL_ERROR",
+      message: "Internal error",
+    });
+  }
+})
+
+app.listen(3000);
+```
+
 # Roadmap
 
-- [] extends api endpoint definitions to have optional error descriptions
 - [] add support for swagger/openapi generation
 - [] add utilities to combine api declarations to match the express router api
 - [] add autocompletion for express `app.name()`
