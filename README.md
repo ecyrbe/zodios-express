@@ -40,7 +40,7 @@ It's an express adapter for zodios that helps you type your express routes.
 - [Install](#install)
 - [How to use it ?](#how-to-use-it-)
   - [`zodiosApp` : Declare your API for fullstack end to end type safety](#zodiosapp--declare-your-api-for-fullstack-end-to-end-type-safety)
-  - [`zodiosRouter` : Split your apppplication with multiple routers](#zodiosrouter--split-your-apppplication-with-multiple-routers)
+  - [`zodiosRouter` : Split your application with multiple routers](#zodiosrouter--split-your-application-with-multiple-routers)
 - [Roadmap](#roadmap)
 
 # Install
@@ -122,7 +122,7 @@ app.get("/users/:id", (req, res) => {
 app.listen(3000);
 ```
 
-## `zodiosRouter` : Split your apppplication with multiple routers
+## `zodiosRouter` : Split your application with multiple routers
 
 When organizing your express application, you usually want to split your API declarations into separate Routers.
 You can use the `zodiosRouter` to do that with a `zodiosApp` without APIs attached.
