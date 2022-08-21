@@ -1,11 +1,11 @@
- <h1 align="center">Zodios</h1>
+ <h1 align="center">Zodios Express</h1>
  <p align="center">
    <a href="https://github.com/ecyrbe/zodios-express">
      <img align="center" src="https://raw.githubusercontent.com/ecyrbe/zodios/main/docs/logo.svg" width="128px" alt="Zodios logo">
    </a>
  </p>
  <p align="center">
-    Zodios express is a typescript end to end type helper for express using <a href="https://github.com/colinhacks/zod">zod</a>
+    Zodios express is a typescript end to end typesafe adapter for express using <a href="https://github.com/colinhacks/zod">zod</a>
     <br/>
  </p>
  
@@ -41,6 +41,7 @@ It's an express adapter for zodios that helps you type your express routes.
 - [How to use it ?](#how-to-use-it-)
   - [`zodiosApp` : Declare your API for fullstack end to end type safety](#zodiosapp--declare-your-api-for-fullstack-end-to-end-type-safety)
   - [`zodiosRouter` : Split your apppplication with multiple routers](#zodiosrouter--split-your-apppplication-with-multiple-routers)
+  - [Roadmap](#roadmap)
 
 # Install
 
@@ -137,3 +138,9 @@ const app.use(userRouter,adminRouter);
 
 app.listen(3000);
 ```
+## Roadmap
+
+- [] extends api endpoint definitions to have optional error descriptions
+- [] add support for swagger/openapi generation
+- [] add utilities to combine api declarations to match the express router api
+- [] add autocompletion for express `app.name()`
