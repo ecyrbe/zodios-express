@@ -22,6 +22,8 @@
    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/ecyrbe/zodios-express/CI">
  </p>
 
+https://user-images.githubusercontent.com/633115/185851987-554f5686-cb78-4096-8ff5-c8d61b645608.mp4
+
 # What is it ?
 
 It's an express adapter for zodios that helps you type your express routes.
