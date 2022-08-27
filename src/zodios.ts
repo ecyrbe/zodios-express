@@ -49,7 +49,9 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
                 }
                 const result = schema.safeParse(req.query[parameter.name]);
                 if (!result.success) {
-                  return next(result.error);
+                  return res.status(400).json({
+                    error: result.error.issues,
+                  });
                 }
               }
               break;
