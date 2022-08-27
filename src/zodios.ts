@@ -30,6 +30,7 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
                 const result = schema.safeParse(req.body);
                 if (!result.success) {
                   return res.status(400).json({
+                    context: "body",
                     error: result.error.issues,
                   });
                 }
@@ -42,6 +43,7 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
                   const result = schema.safeParse(+req.query[parameter.name]!);
                   if (!result.success) {
                     return res.status(400).json({
+                      context: `query.${parameter.name}`,
                       error: result.error.issues,
                     });
                   }
@@ -50,6 +52,7 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
                 const result = schema.safeParse(req.query[parameter.name]);
                 if (!result.success) {
                   return res.status(400).json({
+                    context: `query.${parameter.name}`,
                     error: result.error.issues,
                   });
                 }
@@ -62,6 +65,7 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
                 );
                 if (!result.success) {
                   return res.status(400).json({
+                    context: `header.${parameter.name}`,
                     error: result.error.issues,
                   });
                 }
