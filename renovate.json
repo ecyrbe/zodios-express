@@ -1,5 +1,5 @@
 {
   "extends": ["config:base"],
   "ignorePaths": ["examples/next/package.json"],
-  "ignoreDeps": ["form-data-encoder"]
+  "ignoreDeps": ["form-data-encoder", "formdata-node"]
 }
