@@ -315,10 +315,10 @@
   resolved "https://registry.yarnpkg.com/@zodios/core/-/core-9.0.0.tgz#b34cebc45a992b157edfe1de9cc919767c6382da"
   integrity sha512-asq1sRAAogUJxKZowxX5AoETbhUheeczgMseInsp9R8Qu38CX8ZRCBcj4o1cREAWqi0bnTVtqc4Kh3sj/tKp9A==
 
-"@zodios/express@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-0.0.3.tgz#c4b95c6fd5d9e0e4115496aee33ab169fe073b1c"
-  integrity sha512-TI6hbuK0loEmFZgYnSTRqzj7LpGQ16b+ao0e+Dcao+eC9wS67Kooc0KYleSIAcct5kHItk1vSIVLcvA+M86akw==
+"@zodios/express@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-0.1.1.tgz#b7af2e17e6618a449975d7c5021be62c9f81f510"
+  integrity sha512-EEdgnkPcKJad14o8QTx+UmDiVVn1xw6twhUtsZ+iJmR2GbMkDmcJ8BDrcguIH5GJtkMRO9Nz9HAa46cDj/Kuvg==
 
 accepts@~1.3.8:
   version "1.3.8"
