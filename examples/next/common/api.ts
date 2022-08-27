@@ -4,26 +4,21 @@ import { asApi } from "@zodios/core";
 const user = z.object({
   id: z.number(),
   name: z.string(),
-  age: z.number(),
-  email: z.string(),
+  age: z.number().positive(),
+  email: z.string().email(),
 });
 
 export const userApi = asApi([
   {
     method: "get",
     path: "/users",
-    parameters: [
-      {
-        name: "email",
-        type: "Query",
-        schema: z.string().email(),
-      },
-    ],
+    alias: "getUsers",
     response: z.array(user),
   },
   {
     method: "get",
     path: "/users/:id",
+    alias: "getUser",
     response: user,
     errors: [
       {
@@ -36,5 +31,18 @@ export const userApi = asApi([
         }),
       },
     ],
+  },
+  {
+    method: "post",
+    path: "/users",
+    alias: "createUser",
+    parameters: [
+      {
+        name: "user",
+        type: "Body",
+        schema: user.omit({ id: true }),
+      },
+    ],
+    response: user,
   },
 ]);
