@@ -76,15 +76,6 @@ export interface ZodiosValidationOptions {
    * transform request parameters - default is false
    */
   transform?: boolean;
-  /**
-   * zod error handler - default is zodErrorMiddleware
-   */
-  zodErrorHandler?: (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => void;
 }
 
 export interface ZodiosAppOptions extends ZodiosValidationOptions {

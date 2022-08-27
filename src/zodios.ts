@@ -10,21 +10,6 @@ import {
 } from "./zodios.types";
 import { isZodNumber, withoutTransform } from "./zodios.utils";
 
-export function zodErrorMiddleware(
-  err: Error,
-  _req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  if (err instanceof z.ZodError) {
-    res.status(400).json({
-      error: err.issues,
-    });
-  } else {
-    next(err);
-  }
-}
-
 export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
   api: Api,
   router: express.Router,
@@ -32,7 +17,7 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
 ) {
   for (let endpoint of api) {
     if (endpoint.parameters) {
-      router[endpoint.method](endpoint.path, (req, _res, next) => {
+      router[endpoint.method](endpoint.path, (req, res, next) => {
         for (let parameter of endpoint.parameters!) {
           let schema = parameter.schema;
           if (!transform) {
@@ -44,7 +29,9 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
               {
                 const result = schema.safeParse(req.body);
                 if (!result.success) {
-                  return next(result.error);
+                  return res.status(400).json({
+                    error: result.error.issues,
+                  });
                 }
                 req.body = result.data;
               }
@@ -54,7 +41,9 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
                 if (isZodNumber(schema) && req.query[parameter.name]) {
                   const result = schema.safeParse(+req.query[parameter.name]!);
                   if (!result.success) {
-                    return next(result.error);
+                    return res.status(400).json({
+                      error: result.error.issues,
+                    });
                   }
                   return next();
                 }
@@ -70,7 +59,9 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
                   req.get(parameter.name)
                 );
                 if (!result.success) {
-                  return next(result.error);
+                  return res.status(400).json({
+                    error: result.error.issues,
+                  });
                 }
               }
               break;
@@ -90,14 +81,12 @@ export function zodiosApp<Api extends ZodiosEnpointDescriptions = any>(
     express: app = express(),
     validate = true,
     transform = false,
-    zodErrorHandler = zodErrorMiddleware,
   } = options;
   if (!options.express) {
     app.use(express.json());
   }
   if (api && validate) {
     useValidateParameters(api, app, transform);
-    app.use(zodErrorHandler);
   }
   return app as unknown as ZodiosApp<Api>;
 }
@@ -109,13 +98,11 @@ export function zodiosRouter<Api extends ZodiosEnpointDescriptions>(
   const {
     validate = true,
     transform = false,
-    zodErrorHandler = zodErrorMiddleware,
     ...routerOptions
   } = options || {};
   const router = options?.router ?? express.Router(routerOptions);
   if (validate) {
     useValidateParameters(api, router, transform);
-    router.use(zodErrorMiddleware);
   }
   return router as unknown as ZodiosRouter<Api>;
 }
