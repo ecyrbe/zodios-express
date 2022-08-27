@@ -185,6 +185,7 @@ describe("router", () => {
     const req = request(app);
     const result = await req.get("/users?limit=0").expect(400);
     expect(result.body).toEqual({
+      context: "query.limit",
       error: [
         {
           code: "too_small",
@@ -233,6 +234,7 @@ describe("router", () => {
     });
     expect(result.status).toBe(400);
     expect(result.body).toEqual({
+      context: "body",
       error: [
         {
           validation: "email",
