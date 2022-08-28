@@ -1,11 +1,7 @@
-import express from "express";
-import { zodiosApp, zodiosRouter } from "@zodios/express";
+import { zodiosNextApp, zodiosRouter } from "@zodios/express";
 import { userApi } from "../../common/api";
 
-const app = zodiosApp(undefined, {
-  express: express(),
-});
-
+const app = zodiosNextApp();
 const router = zodiosRouter(userApi);
 app.use("/api", router);
 

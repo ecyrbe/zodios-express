@@ -315,10 +315,10 @@
   resolved "https://registry.yarnpkg.com/@zodios/core/-/core-9.0.0.tgz#b34cebc45a992b157edfe1de9cc919767c6382da"
   integrity sha512-asq1sRAAogUJxKZowxX5AoETbhUheeczgMseInsp9R8Qu38CX8ZRCBcj4o1cREAWqi0bnTVtqc4Kh3sj/tKp9A==
 
-"@zodios/express@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-0.1.1.tgz#b7af2e17e6618a449975d7c5021be62c9f81f510"
-  integrity sha512-EEdgnkPcKJad14o8QTx+UmDiVVn1xw6twhUtsZ+iJmR2GbMkDmcJ8BDrcguIH5GJtkMRO9Nz9HAa46cDj/Kuvg==
+"@zodios/express@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-0.2.0.tgz#3d3c5aba59e971364656b29a61e3a2aa6afd4a13"
+  integrity sha512-uzc01dU+VGtD1YlCP/4Up+KS/V0scLerbubYEgSa0iAWg3flTd8wDtqHBl/lIM9mhmf//SukEvvMYTplmWgYJQ==
 
 "@zodios/react@^9.0.1":
   version "9.0.1"
