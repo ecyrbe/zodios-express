@@ -83,6 +83,10 @@ export interface ZodiosAppOptions extends ZodiosValidationOptions {
    * express app intance - default is express()
    */
   express?: ReturnType<typeof express>;
+  /**
+   * enable express json body parser - default is true
+   */
+  enableJsonBodyParser?: boolean;
 }
 
 export interface ZodiosRouterOptions extends ZodiosValidationOptions {

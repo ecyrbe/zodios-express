@@ -79,16 +79,23 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
   }
 }
 
+/**
+ * create a zodios app based on the given api and express
+ * @param api - api definition
+ * @param options - options to configure the app
+ * @returns
+ */
 export function zodiosApp<Api extends ZodiosEnpointDescriptions = any>(
   api?: Narrow<Api>,
   options: ZodiosAppOptions = {}
 ): ZodiosApp<Api> {
   const {
     express: app = express(),
+    enableJsonBodyParser = true,
     validate = true,
     transform = false,
   } = options;
-  if (!options.express) {
+  if (enableJsonBodyParser) {
     app.use(express.json());
   }
   if (api && validate) {
@@ -97,6 +104,12 @@ export function zodiosApp<Api extends ZodiosEnpointDescriptions = any>(
   return app as unknown as ZodiosApp<Api>;
 }
 
+/**
+ * create a zodios router based on the given api and express router
+ * @param api - api definition
+ * @param options - options to configure the router
+ * @returns
+ */
 export function zodiosRouter<Api extends ZodiosEnpointDescriptions>(
   api: Narrow<Api>,
   options?: RouterOptions & ZodiosRouterOptions
@@ -111,4 +124,13 @@ export function zodiosRouter<Api extends ZodiosEnpointDescriptions>(
     useValidateParameters(api, router, transform);
   }
   return router as unknown as ZodiosRouter<Api>;
+}
+
+/**
+ * create a zodios app for nextjs
+ * @param options - options to configure the app
+ * @returns - a zodios app
+ */
+export function zodiosNextApp(options: ZodiosAppOptions = {}) {
+  return zodiosApp(undefined, { ...options, enableJsonBodyParser: false });
 }
