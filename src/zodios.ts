@@ -133,10 +133,11 @@ export function zodiosRouter<
  * @param options - options to configure the app
  * @returns - a zodios app
  */
-export function zodiosNextApp<Context extends ZodObject<any>>(
-  options: ZodiosAppOptions<Context> = {}
-) {
-  return zodiosApp(undefined, { ...options, enableJsonBodyParser: false });
+export function zodiosNextApp<
+  Api extends ZodiosEnpointDescriptions = any,
+  Context extends ZodObject<any> = ZodObject<any>
+>(api?: Narrow<Api>, options: ZodiosAppOptions<Context> = {}) {
+  return zodiosApp(api, { ...options, enableJsonBodyParser: false });
 }
 
 class ZodiosContext<Context extends ZodObject<any>> {
@@ -149,8 +150,11 @@ class ZodiosContext<Context extends ZodObject<any>> {
     return zodiosApp<Api, Context>(api, options);
   }
 
-  nextApp(options: ZodiosAppOptions<Context> = {}) {
-    return zodiosNextApp<Context>(options);
+  nextApp<Api extends ZodiosEnpointDescriptions = any>(
+    api?: Narrow<Api>,
+    options: ZodiosAppOptions<Context> = {}
+  ) {
+    return zodiosNextApp<Api, Context>(api, options);
   }
 
   router<Api extends ZodiosEnpointDescriptions>(

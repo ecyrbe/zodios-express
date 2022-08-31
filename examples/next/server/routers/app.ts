@@ -1,5 +1,5 @@
-import { zodiosNextApp } from "@zodios/express";
+import { ctx } from "../context";
 import { userRouter } from "./users";
 
-export const app = zodiosNextApp();
+export const app = ctx.nextApp();
 app.use("/api", userRouter);
