@@ -1,5 +1,5 @@
 import express, { RouterOptions } from "express";
-import z from "zod";
+import z, { ZodAny, ZodObject, ZodType } from "zod";
 import { ZodiosEnpointDescriptions } from "@zodios/core";
 import { Narrow } from "@zodios/core/lib/utils.types";
 import {
@@ -85,10 +85,13 @@ export function useValidateParameters<Api extends ZodiosEnpointDescriptions>(
  * @param options - options to configure the app
  * @returns
  */
-export function zodiosApp<Api extends ZodiosEnpointDescriptions = any>(
+export function zodiosApp<
+  Api extends ZodiosEnpointDescriptions = any,
+  Context extends ZodObject<any> = ZodObject<any>
+>(
   api?: Narrow<Api>,
-  options: ZodiosAppOptions = {}
-): ZodiosApp<Api> {
+  options: ZodiosAppOptions<Context> = {}
+): ZodiosApp<Api, Context> {
   const {
     express: app = express(),
     enableJsonBodyParser = true,
@@ -101,7 +104,7 @@ export function zodiosApp<Api extends ZodiosEnpointDescriptions = any>(
   if (api && validate) {
     useValidateParameters(api, app, transform);
   }
-  return app as unknown as ZodiosApp<Api>;
+  return app as unknown as ZodiosApp<Api, Context>;
 }
 
 /**
@@ -110,20 +113,19 @@ export function zodiosApp<Api extends ZodiosEnpointDescriptions = any>(
  * @param options - options to configure the router
  * @returns
  */
-export function zodiosRouter<Api extends ZodiosEnpointDescriptions>(
+export function zodiosRouter<
+  Api extends ZodiosEnpointDescriptions,
+  Context extends ZodObject<any> = ZodObject<any>
+>(
   api: Narrow<Api>,
-  options?: RouterOptions & ZodiosRouterOptions
-): ZodiosRouter<Api> {
-  const {
-    validate = true,
-    transform = false,
-    ...routerOptions
-  } = options || {};
+  options: RouterOptions & ZodiosRouterOptions<Context> = {}
+): ZodiosRouter<Api, Context> {
+  const { validate = true, transform = false, ...routerOptions } = options;
   const router = options?.router ?? express.Router(routerOptions);
   if (validate) {
     useValidateParameters(api, router, transform);
   }
-  return router as unknown as ZodiosRouter<Api>;
+  return router as unknown as ZodiosRouter<Api, Context>;
 }
 
 /**
@@ -131,6 +133,36 @@ export function zodiosRouter<Api extends ZodiosEnpointDescriptions>(
  * @param options - options to configure the app
  * @returns - a zodios app
  */
-export function zodiosNextApp(options: ZodiosAppOptions = {}) {
+export function zodiosNextApp<Context extends ZodObject<any>>(
+  options: ZodiosAppOptions<Context> = {}
+) {
   return zodiosApp(undefined, { ...options, enableJsonBodyParser: false });
+}
+
+class ZodiosContext<Context extends ZodObject<any>> {
+  constructor(private context?: Context) {}
+
+  app<Api extends ZodiosEnpointDescriptions = any>(
+    api?: Narrow<Api>,
+    options: ZodiosAppOptions<Context> = {}
+  ) {
+    return zodiosApp<Api, Context>(api, options);
+  }
+
+  nextApp(options: ZodiosAppOptions<Context> = {}) {
+    return zodiosNextApp<Context>(options);
+  }
+
+  router<Api extends ZodiosEnpointDescriptions>(
+    api: Narrow<Api>,
+    options?: RouterOptions & ZodiosRouterOptions<Context>
+  ) {
+    return zodiosRouter<Api, Context>(api, options);
+  }
+}
+
+export function zodiosContext<Context extends ZodObject<any> = ZodObject<any>>(
+  context?: Context
+): ZodiosContext<Context> {
+  return new ZodiosContext(context);
 }

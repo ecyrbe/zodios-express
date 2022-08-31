@@ -2,7 +2,7 @@ import express from "express";
 import request from "supertest";
 import z from "zod";
 import { apiBuilder, asErrors, EndpointError } from "@zodios/core";
-import { zodiosApp, zodiosRouter } from "./zodios";
+import { zodiosContext } from "./zodios";
 
 const user = z.object({
   id: z.number(),
@@ -69,6 +69,11 @@ const userApi = apiBuilder({
         type: "Body",
         schema: user,
       },
+      {
+        name: "Authorization",
+        type: "Header",
+        schema: z.string().regex(/^Bearer\s+[a-zA-Z0-9]+$/),
+      },
     ],
     response: user,
   })
@@ -81,7 +86,7 @@ const userApi = apiBuilder({
 
 describe("router", () => {
   it("should get one user", async () => {
-    const app = zodiosApp(userApi);
+    const app = zodiosContext().app(userApi);
     app.get("/users/:id", (req, res, next) => {
       if (+req.params.id >= 10) {
         return res.status(404).json({
@@ -107,7 +112,7 @@ describe("router", () => {
   });
 
   it("should not find user if id>10", async () => {
-    const app = zodiosApp(userApi);
+    const app = zodiosContext().app(userApi);
     app.get("/users/:id", (req, res, next) => {
       if (+req.params.id >= 10) {
         return res.status(404).json({
@@ -133,17 +138,30 @@ describe("router", () => {
     });
   });
 
-  it("should get many users", async () => {
-    const app = zodiosApp();
-    const router = zodiosRouter(userApi);
+  it("should get many users with context", async () => {
+    const ctx = zodiosContext(
+      z.object({
+        user: z.object({
+          id: z.number(),
+          name: z.string(),
+          email: z.string().email(),
+        }),
+      })
+    );
+    const app = ctx.app();
+    const router = ctx.router(userApi);
+    router.use((req, res, next) => {
+      req.user = {
+        id: 1,
+        name: "john doe",
+        email: "john.doe@domain.com",
+      };
+      next();
+    });
     app.use(router);
     router.get("/users", (req, res, next) => {
       res.json([
-        {
-          id: 1,
-          name: "john doe",
-          email: "john.doe@domain.com",
-        },
+        req.user,
         {
           id: 2,
           name: "jane doe",
@@ -167,7 +185,7 @@ describe("router", () => {
     ]);
   });
   it("should return 400 error on bad query params", async () => {
-    const app = zodiosApp(userApi);
+    const app = zodiosContext().app(userApi);
     app.get("/users", (req, res, next) => {
       res.json([
         {
@@ -199,7 +217,7 @@ describe("router", () => {
     });
   });
   it("should create a user", async () => {
-    const app = zodiosApp(userApi);
+    const app = zodiosContext().app(userApi);
     app.post("/users", (req, res, next) => {
       res.json({
         id: 1,
@@ -220,7 +238,7 @@ describe("router", () => {
   });
 
   it("should return 400 error when sending an invalid user", async () => {
-    const app = zodiosApp(userApi);
+    const app = zodiosContext().app(userApi);
     app.post("/users", (req, res, next) => {
       res.json({
         id: 1,
@@ -244,5 +262,39 @@ describe("router", () => {
         },
       ],
     });
+  });
+  it("should succeed to put a user if authenticated", async () => {
+    const app = zodiosContext().app(userApi);
+    app.put("/users/:id", (req, res) => {
+      res.json(req.body);
+    });
+    const req = request(app);
+    const result = await req
+      .put("/users/1")
+      .send({
+        id: 1,
+        name: "john doe",
+        email: "john.doe@domain.com",
+      })
+      .set("Authorization", "Bearer 12345");
+    expect(result.status).toBe(200);
+    expect(result.body).toEqual({
+      id: 1,
+      name: "john doe",
+      email: "john.doe@domain.com",
+    });
+  });
+  it("should fail to put a user if not authenticated", async () => {
+    const app = zodiosContext().app(userApi);
+    app.put("/users/:id", (req, res) => {
+      res.json(req.body);
+    });
+    const req = request(app);
+    const result = await req.put("/users/1").send({
+      id: 1,
+      name: "john doe",
+      email: "john.doe@domain.com",
+    });
+    expect(result.status).toBe(400);
   });
 });
