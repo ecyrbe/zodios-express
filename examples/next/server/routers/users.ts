@@ -1,7 +1,5 @@
-import { zodiosRouter } from "@zodios/express";
+import { ctx } from "../context";
 import { userApi } from "../../common/api";
-
-export const userRouter = zodiosRouter(userApi);
 
 const users = [
   {
@@ -11,6 +9,8 @@ const users = [
     email: "john.doe@test.com",
   },
 ];
+
+export const userRouter = ctx.router(userApi);
 
 userRouter.get("/users", (req, res) => {
   res.status(200).json(users);
