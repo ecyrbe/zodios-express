@@ -123,8 +123,9 @@ export type ZodiosApp<
 > = IfEquals<
   Api,
   any,
-  ReturnType<typeof express> & ZodiosUse<Context>,
-  Omit<ReturnType<typeof express.Router>, Method> & ZodiosHandlers<Api, Context>
+  Omit<ReturnType<typeof express>, "use"> & ZodiosUse<Context>,
+  Omit<ReturnType<typeof express.Router>, Method | "use"> &
+    ZodiosHandlers<Api, Context>
 >;
 
 export type ZodiosRouter<
