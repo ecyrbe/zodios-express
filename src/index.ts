@@ -1,4 +1,9 @@
-export { zodiosApp, zodiosRouter, zodiosNextApp } from "./zodios";
+export {
+  zodiosApp,
+  zodiosRouter,
+  zodiosNextApp,
+  zodiosContext,
+} from "./zodios";
 export type {
   ZodiosApp,
   ZodiosRouter,
