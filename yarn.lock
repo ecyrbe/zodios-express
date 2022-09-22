@@ -961,10 +961,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@zodios/core@9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-9.1.0.tgz#ad319155c0e18c05ad34d1f66bf131ca9b884503"
-  integrity sha512-BdoI4NuzMj6H70w55osyjjuXkVj1YwZdPfxQB1PjBwLPQEO39bX9AzkVPt3pYtMUuDVWmiMbWP+1ryE4wdU9Ag==
+"@zodios/core@9.2.0":
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-9.2.0.tgz#b2bf09f0b361dd9bebcb4966c7960e363f345316"
+  integrity sha512-b8gf79ETm9hGyx1G+ZhN51IULm8nZZXJG2ic8Kb+xP3HnBiKiRuP71t9XnCvfiVD5dy2Ue4fOfLokjdfmUkPsg==
 
 accepts@~1.3.8:
   version "1.3.8"
