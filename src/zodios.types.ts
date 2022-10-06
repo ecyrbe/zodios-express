@@ -124,7 +124,7 @@ export type ZodiosApp<
   Api,
   any,
   Omit<ReturnType<typeof express>, "use"> & ZodiosUse<Context>,
-  Omit<ReturnType<typeof express.Router>, Method | "use"> &
+  Omit<ReturnType<typeof express>, Method | "use"> &
     ZodiosHandlers<Api, Context>
 >;
 

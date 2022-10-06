@@ -1,5 +1,5 @@
 import express, { RouterOptions } from "express";
-import z, { ZodAny, ZodObject, ZodType } from "zod";
+import { ZodObject } from "zod";
 import { ZodiosEnpointDescriptions } from "@zodios/core";
 import { Narrow } from "@zodios/core/lib/utils.types";
 import {
