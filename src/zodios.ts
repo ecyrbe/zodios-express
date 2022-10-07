@@ -141,7 +141,7 @@ export function zodiosNextApp<
 }
 
 class ZodiosContext<Context extends ZodObject<any>> {
-  constructor(private context?: Context) {}
+  constructor(public context?: Context) {}
 
   app<Api extends ZodiosEnpointDescriptions = any>(
     api?: Narrow<Api>,
