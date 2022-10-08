@@ -166,13 +166,6 @@
   dependencies:
     tslib "^2.4.0"
 
-"@types/axios@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
-  integrity sha512-KqQnQbdYE54D7oa/UmYVMZKq7CO4l8DEENzOKc4aBRwxCXSlJXGz83flFx5L7AWrOQnmuN3kVsRdt+GZPPjiVQ==
-  dependencies:
-    axios "*"
-
 "@types/body-parser@*":
   version "1.19.2"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
@@ -197,7 +190,7 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express@^4.17.13":
+"@types/express@4.17.13":
   version "4.17.13"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.13.tgz#a76e2995728999bab51a33fabce1d705a3709034"
   integrity sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==
@@ -310,20 +303,20 @@
     "@typescript-eslint/types" "5.35.1"
     eslint-visitor-keys "^3.3.0"
 
-"@zodios/core@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-9.0.0.tgz#b34cebc45a992b157edfe1de9cc919767c6382da"
-  integrity sha512-asq1sRAAogUJxKZowxX5AoETbhUheeczgMseInsp9R8Qu38CX8ZRCBcj4o1cREAWqi0bnTVtqc4Kh3sj/tKp9A==
+"@zodios/core@9.3.3":
+  version "9.3.3"
+  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-9.3.3.tgz#7d4cc48557998331377ab7e9994be9479d84ea9f"
+  integrity sha512-hGAWXWWnco/pSp1jaIDZglUX+yW89aNAdgUlRWgfzMWRIqm94XmDY7HlqPCEfJ/649zwTb9vbNYPKRlv0vkL3A==
 
-"@zodios/express@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-0.3.1.tgz#3f1c3ce99c8a1008959e486b4ce8c9b51d0cdba8"
-  integrity sha512-+uu8oBK3oiI/TEeEc/rURuKiRw3IcKuIuoMhClbEwTHhV4+/6FyRxgJPvK6T/M7zgm/ltQnzW0jf6f77ArlYqw==
+"@zodios/express@0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-0.3.4.tgz#ef2d32860b4b5223dfe57fbb68d08c4fbf18117f"
+  integrity sha512-26/E5VXmB51RFbzIUP6ndliTAWqzf8n00yLb/l0HVf6Y7lMjhWH5bcswzjupWqkuE//rnSUt5CH/huiGYHffFg==
 
-"@zodios/react@^9.0.1":
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/@zodios/react/-/react-9.0.1.tgz#b67d9a619212825d6ff94ca97d3a4b438e512b76"
-  integrity sha512-IH8mUBszHkidWWhe3WiXcn0dUYJZZ7gphumt6KNanSI/sriLMMTTryVRGzuuTZ3BPxWh9qQWinS4ndJDqkNlkQ==
+"@zodios/react@9.4.4":
+  version "9.4.4"
+  resolved "https://registry.yarnpkg.com/@zodios/react/-/react-9.4.4.tgz#fe732c8a603466cd234a7c110924cf3bf1f8b693"
+  integrity sha512-XMD7+jgei7N3/Ry5zmXcJmEaT7uzRbIjJ4HHG3jWEZuaeh6YNfpfe+OxQwMLe9h1jQhmhGC7Mm+gHYHDKYPSng==
 
 accepts@~1.3.8:
   version "1.3.8"
@@ -434,7 +427,7 @@ axe-core@^4.4.3:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.4.3.tgz#11c74d23d5013c0fa5d183796729bc3482bd2f6f"
   integrity sha512-32+ub6kkdhhWick/UjvEwRchgoetXqTK14INLqbGm5U2TzBkBNF3nQtLYm8ovxSkQWArjEQvftCKryjZaATu3w==
 
-axios@*, axios@^0.27.2:
+axios@0.27.2:
   version "0.27.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
   integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
@@ -962,7 +955,7 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
-express@^4.18.1:
+express@4.18.1:
   version "4.18.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.18.1.tgz#7797de8b9c72c857b9cd0e14a5eea80666267caf"
   integrity sha512-zZBcOX9TfehHQhtupq57OF8lFZ3UZi08Y97dwFCkD8p9d/d2Y3M+ykKcwaMDEL+4qyUolgBDX6AblpR3fL212Q==
