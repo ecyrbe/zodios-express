@@ -9,7 +9,7 @@ import {
   PathParams,
   Method,
 } from "@zodios/core/lib/zodios.types";
-import { z, ZodAny, ZodType, ZodObject } from "zod";
+import { z, ZodAny, ZodObject } from "zod";
 
 type SucessCodes = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
 

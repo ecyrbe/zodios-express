@@ -1,25 +1,28 @@
-import { asApi } from "@zodios/core";
-import z from "zod";
+import { makeApi } from "@zodios/core";
+import { z } from "zod";
 import { prefixApi } from "./zodios.utils";
 import { Assert } from "@zodios/core/lib/utils.types";
 
+const response = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+const api = makeApi([
+  {
+    method: "get",
+    path: "/",
+    response,
+  },
+  {
+    method: "get",
+    path: "/foo",
+    response,
+  },
+]);
+
 describe("zodios utils", () => {
   it("should prefix api", () => {
-    const response = z.object({
-      id: z.number(),
-    });
-    const api = asApi([
-      {
-        method: "get",
-        path: "/",
-        response,
-      },
-      {
-        method: "get",
-        path: "/foo",
-        response,
-      },
-    ]);
     type Expected = [
       {
         method: "get";

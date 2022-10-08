@@ -10,8 +10,7 @@
     "strict": true,
     "esModuleInterop": true,
     "sourceMap": true,
-    "declaration": true,
-    "jsx": "react-jsx"
+    "declaration": true
   },
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "lib", "examples"]
 }

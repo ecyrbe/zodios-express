@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 
 type MapPrefixPath<
   T extends readonly unknown[],
@@ -31,23 +31,21 @@ export function prefixApi<Prefix extends string, Api extends readonly any[]>(
   })) as MapPrefixPath<Api, Prefix>;
 }
 
-export function isZodNumber(t: z.ZodType): boolean {
-  // @ts-ignore
-  if (t._def.typeName === "ZodNumber") {
+export function isZodType(
+  t: z.ZodTypeAny,
+  type: z.ZodFirstPartyTypeKind
+): boolean {
+  if (t._def?.typeName === type) {
     return true;
   }
-  // @ts-ignore
-  if (t._def.innerType) {
-    // @ts-ignore
-    return isZodNumber(t._def.innerType);
+  if (t._def?.innerType) {
+    return isZodType(t._def.innerType, type);
   }
   return false;
 }
 
-export function withoutTransform(t: z.ZodType): z.ZodType {
-  // @ts-ignore
-  if (t._def.typeName === "ZodEffect") {
-    // @ts-ignore
+export function withoutTransform(t: z.ZodTypeAny): z.ZodTypeAny {
+  if (t._def?.typeName === z.ZodFirstPartyTypeKind.ZodEffects) {
     return withoutTransform(t._def.innerType);
   }
   return t;
