@@ -1,14 +1,16 @@
 import express from "express";
-import { ZodiosEnpointDescriptions, EndpointError } from "@zodios/core";
-import { IfEquals } from "@zodios/core/lib/utils.types";
 import {
+  ZodiosEnpointDescriptions,
+  ZodiosEndpointDescription,
+  EndpointError,
   Response,
   QueryParams,
   Body,
   Paths,
   PathParams,
   Method,
-} from "@zodios/core/lib/zodios.types";
+} from "@zodios/core";
+import { IfEquals } from "@zodios/core/lib/utils.types";
 import { z, ZodAny, ZodObject } from "zod";
 
 type SucessCodes = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
@@ -33,9 +35,9 @@ export interface RequestHandler<
       // rebind context to allow for type inference
       status<
         StatusCode extends number,
-        API extends unknown[] = Api,
+        API extends ZodiosEndpointDescription[] = Api,
         METHOD extends Method = M,
-        PATH = Path
+        PATH extends Paths<Api, M> = Path
       >(
         status: StatusCode
       ): StatusCode extends SucessCodes
