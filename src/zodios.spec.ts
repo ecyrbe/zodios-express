@@ -1,7 +1,7 @@
 import express from "express";
 import request from "supertest";
 import z from "zod";
-import { apiBuilder, asErrors, EndpointError } from "@zodios/core";
+import { apiBuilder, makeErrors } from "@zodios/core";
 import { zodiosContext } from "./zodios";
 
 const user = z.object({
@@ -10,7 +10,7 @@ const user = z.object({
   email: z.string().email(),
 });
 
-const errors = asErrors([
+const errors = makeErrors([
   {
     status: "default",
     schema: z.object({
@@ -21,8 +21,6 @@ const errors = asErrors([
     }),
   },
 ]);
-
-type Test = EndpointError<typeof userApi, "get", "/users/:id", 407>;
 
 const userApi = apiBuilder({
   method: "get",

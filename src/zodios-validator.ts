@@ -1,10 +1,10 @@
 import express from "express";
-import { ZodiosEnpointDescriptions } from "@zodios/core";
+import { ZodiosEndpointDefinitions } from "@zodios/core";
 import { isZodType, withoutTransform } from "./zodios.utils";
 import { z } from "zod";
 
 export function useValidateParameters(
-  api: ZodiosEnpointDescriptions,
+  api: ZodiosEndpointDefinitions,
   router: express.Router,
   transform: boolean
 ) {
