@@ -1,6 +1,6 @@
 import express, { RouterOptions } from "express";
 import { ZodObject } from "zod";
-import { ZodiosEnpointDescriptions } from "@zodios/core";
+import { ZodiosEndpointDefinitions } from "@zodios/core";
 import { Narrow } from "@zodios/core/lib/utils.types";
 import {
   ZodiosApp,
@@ -17,7 +17,7 @@ import { useValidateParameters } from "./zodios-validator";
  * @returns
  */
 export function zodiosApp<
-  Api extends ZodiosEnpointDescriptions = any,
+  Api extends ZodiosEndpointDefinitions = any,
   Context extends ZodObject<any> = ZodObject<any>
 >(
   api?: Narrow<Api>,
@@ -45,7 +45,7 @@ export function zodiosApp<
  * @returns
  */
 export function zodiosRouter<
-  Api extends ZodiosEnpointDescriptions,
+  Api extends ZodiosEndpointDefinitions,
   Context extends ZodObject<any> = ZodObject<any>
 >(
   api: Narrow<Api>,
@@ -65,7 +65,7 @@ export function zodiosRouter<
  * @returns - a zodios app
  */
 export function zodiosNextApp<
-  Api extends ZodiosEnpointDescriptions = any,
+  Api extends ZodiosEndpointDefinitions = any,
   Context extends ZodObject<any> = ZodObject<any>
 >(api?: Narrow<Api>, options: ZodiosAppOptions<Context> = {}) {
   return zodiosApp(api, { ...options, enableJsonBodyParser: false });
@@ -74,21 +74,21 @@ export function zodiosNextApp<
 class ZodiosContext<Context extends ZodObject<any>> {
   constructor(public context?: Context) {}
 
-  app<Api extends ZodiosEnpointDescriptions = any>(
+  app<Api extends ZodiosEndpointDefinitions = any>(
     api?: Narrow<Api>,
     options: ZodiosAppOptions<Context> = {}
   ) {
     return zodiosApp<Api, Context>(api, options);
   }
 
-  nextApp<Api extends ZodiosEnpointDescriptions = any>(
+  nextApp<Api extends ZodiosEndpointDefinitions = any>(
     api?: Narrow<Api>,
     options: ZodiosAppOptions<Context> = {}
   ) {
     return zodiosNextApp<Api, Context>(api, options);
   }
 
-  router<Api extends ZodiosEnpointDescriptions>(
+  router<Api extends ZodiosEndpointDefinitions>(
     api: Narrow<Api>,
     options?: RouterOptions & ZodiosRouterOptions<Context>
   ) {
