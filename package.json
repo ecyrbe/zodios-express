@@ -1,7 +1,7 @@
 {
   "name": "@zodios/express",
   "description": "Typescript express server",
-  "version": "0.4.0",
+  "version": "9.0.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
