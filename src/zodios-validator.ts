@@ -30,11 +30,37 @@ export function useValidateParameters(
                 req.body = result.data;
               }
               break;
+            case "Path":
+              {
+                if (
+                  isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) &&
+                  req.params[parameter.name] &&
+                  !isNaN(+req.params[parameter.name])
+                ) {
+                  const result = schema.safeParse(+req.params[parameter.name]!);
+                  if (!result.success) {
+                    return res.status(400).json({
+                      context: `query.${parameter.name}`,
+                      error: result.error.issues,
+                    });
+                  }
+                  return next();
+                }
+                const result = schema.safeParse(req.params[parameter.name]);
+                if (!result.success) {
+                  return res.status(400).json({
+                    context: `path.${parameter.name}`,
+                    error: result.error.issues,
+                  });
+                }
+              }
+              break;
             case "Query":
               {
                 if (
                   isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) &&
-                  req.query[parameter.name]
+                  req.query[parameter.name] &&
+                  !isNaN(+req.query[parameter.name]!)
                 ) {
                   const result = schema.safeParse(+req.query[parameter.name]!);
                   if (!result.success) {

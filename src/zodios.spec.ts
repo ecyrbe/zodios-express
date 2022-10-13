@@ -43,6 +43,13 @@ const userApi = apiBuilder({
   .addEndpoint({
     method: "get",
     path: "/users/:id",
+    parameters: [
+      {
+        name: "id",
+        type: "Path",
+        schema: z.number(),
+      },
+    ],
     response: user,
     errors,
   })
@@ -182,6 +189,32 @@ describe("router", () => {
       },
     ]);
   });
+
+  it("should return 400 error on bad path params", async () => {
+    const app = zodiosContext().app(userApi);
+    app.get("/users/:id", (req, res, next) => {
+      res.json({
+        id: req.params.id as number,
+        name: "john doe",
+        email: "john.doe@domain.com",
+      });
+    });
+    const req = request(app);
+    const result = await req.get("/users/hello").expect(400);
+    expect(result.body).toEqual({
+      context: "path.id",
+      error: [
+        {
+          code: "invalid_type",
+          expected: "number",
+          message: "Expected number, received string",
+          path: [],
+          received: "string",
+        },
+      ],
+    });
+  });
+
   it("should return 400 error on bad query params", async () => {
     const app = zodiosContext().app(userApi);
     app.get("/users", (req, res, next) => {
