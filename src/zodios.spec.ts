@@ -194,7 +194,7 @@ describe("router", () => {
     const app = zodiosContext().app(userApi);
     app.get("/users/:id", (req, res, next) => {
       res.json({
-        id: req.params.id as number,
+        id: req.params.id,
         name: "john doe",
         email: "john.doe@domain.com",
       });

@@ -7,7 +7,7 @@ import {
   ZodiosQueryParamsByPath,
   ZodiosBodyByPath,
   ZodiosPathsByMethod,
-  ZodiosPathParams,
+  ZodiosPathParamsByPath,
   Method,
 } from "@zodios/core";
 import { IfEquals } from "@zodios/core/lib/utils.types";
@@ -24,7 +24,7 @@ export interface RequestHandler<
   Context extends ZodObject<any>,
   M extends Method,
   Path extends ZodiosPathsByMethod<Api, M>,
-  ReqPath = ZodiosPathParams<Path>,
+  ReqPath = ZodiosPathParamsByPath<Api, M, Path>,
   ReqBody = ZodiosBodyByPath<Api, M, Path>,
   ReqQuery = ZodiosQueryParamsByPath<Api, M, Path>,
   Res = ZodiosResponseByPath<Api, M, Path>
