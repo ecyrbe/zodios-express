@@ -93,7 +93,7 @@ describe("router", () => {
   it("should get one user", async () => {
     const app = zodiosContext().app(userApi);
     app.get("/users/:id", (req, res, next) => {
-      if (+req.params.id >= 10) {
+      if (req.params.id >= 10) {
         return res.status(404).json({
           error: {
             code: "NOT_FOUND",
@@ -101,8 +101,10 @@ describe("router", () => {
           },
         });
       }
+      console.log("req.params.id", req.params.id);
+      console.log("typeof req.params.id", typeof req.params.id);
       res.json({
-        id: +req.params.id,
+        id: req.params.id,
         name: "john doe",
         email: "test@domain.com",
       });
@@ -119,7 +121,7 @@ describe("router", () => {
   it("should not find user if id>10", async () => {
     const app = zodiosContext().app(userApi);
     app.get("/users/:id", (req, res, next) => {
-      if (+req.params.id >= 10) {
+      if (req.params.id >= 10) {
         return res.status(404).json({
           error: {
             code: "NOT_FOUND",
@@ -128,7 +130,7 @@ describe("router", () => {
         });
       }
       res.json({
-        id: +req.params.id,
+        id: req.params.id,
         name: "john doe",
         email: "test@domain.com",
       });
