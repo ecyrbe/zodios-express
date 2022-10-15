@@ -101,8 +101,6 @@ describe("router", () => {
           },
         });
       }
-      console.log("req.params.id", req.params.id);
-      console.log("typeof req.params.id", typeof req.params.id);
       res.json({
         id: req.params.id,
         name: "john doe",

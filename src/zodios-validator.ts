@@ -48,15 +48,7 @@ function validateEndpointMiddleware(
                   error: result.error.issues,
                 });
               }
-              console.log(parameter.name, " : ", result.data);
-              console.log("typeof ", parameter.name, " : ", typeof result.data);
               req.params[parameter.name] = result.data as any;
-              console.log(
-                "typeof req.params.",
-                parameter.name,
-                " : ",
-                typeof req.params[parameter.name]
-              );
               return next();
             }
             const result = schema.safeParse(req.params[parameter.name]);
