@@ -36,6 +36,11 @@ const userApi = apiBuilder({
       type: "Query",
       schema: z.number().min(0).max(Infinity).default(0),
     },
+    {
+      name: "active",
+      type: "Query",
+      schema: z.boolean().default(true),
+    },
   ],
   response: z.array(user),
   errors,
@@ -114,6 +119,56 @@ describe("router", () => {
       name: "john doe",
       email: "test@domain.com",
     });
+  });
+
+  it("should infer boolean in query params", async () => {
+    const app = zodiosContext().app(userApi);
+    app.get("/users", (req, res, next) => {
+      if (req.query.active) {
+        return res.status(200).json([
+          {
+            id: 1,
+            name: "john doe active",
+            email: "test@domain.com",
+          },
+        ]);
+      }
+      res.json([
+        {
+          id: 1,
+          name: "john doe",
+          email: "test@domain.com",
+        },
+      ]);
+    });
+    const req = request(app);
+    const result1 = await req.get("/users?active=false");
+    expect(result1.statusCode).toBe(200);
+    expect(result1.body).toEqual([
+      {
+        id: 1,
+        name: "john doe",
+        email: "test@domain.com",
+      },
+    ]);
+    const result2 = await req.get("/users?active=true");
+    expect(result2.statusCode).toBe(200);
+    expect(result2.body).toEqual([
+      {
+        id: 1,
+        name: "john doe active",
+        email: "test@domain.com",
+      },
+    ]);
+    const result3 = await req.get("/users");
+    expect(result3.statusCode).toBe(200);
+    expect(result3.body).toEqual([
+      {
+        id: 1,
+        name: "john doe active",
+        email: "test@domain.com",
+      },
+    ]);
   });
 
   it("should not find user if id>10", async () => {

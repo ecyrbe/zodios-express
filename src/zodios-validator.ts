@@ -37,14 +37,22 @@ function validateEndpointMiddleware(
         case "Path":
           {
             if (
-              isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) &&
-              req.params[parameter.name] &&
-              !isNaN(+req.params[parameter.name])
+              (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
+                isZodType(schema, z.ZodFirstPartyTypeKind.ZodBoolean)) &&
+              req.params[parameter.name]
             ) {
-              const result = schema.safeParse(+req.params[parameter.name]!);
+              const result = z
+                .preprocess((x) => {
+                  try {
+                    return JSON.parse(x as string);
+                  } catch {
+                    return x;
+                  }
+                }, schema)
+                .safeParse(req.params[parameter.name]);
               if (!result.success) {
                 return res.status(400).json({
-                  context: `query.${parameter.name}`,
+                  context: `path.${parameter.name}`,
                   error: result.error.issues,
                 });
               }
@@ -58,16 +66,25 @@ function validateEndpointMiddleware(
                 error: result.error.issues,
               });
             }
+            req.params[parameter.name] = result.data as any;
           }
           break;
         case "Query":
           {
             if (
-              isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) &&
-              req.query[parameter.name] &&
-              !isNaN(+req.query[parameter.name]!)
+              (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
+                isZodType(schema, z.ZodFirstPartyTypeKind.ZodBoolean)) &&
+              req.query[parameter.name]
             ) {
-              const result = schema.safeParse(+req.query[parameter.name]!);
+              const result = z
+                .preprocess((x) => {
+                  try {
+                    return JSON.parse(x as string);
+                  } catch {
+                    return x;
+                  }
+                }, schema)
+                .safeParse(req.query[parameter.name]);
               if (!result.success) {
                 return res.status(400).json({
                   context: `query.${parameter.name}`,
@@ -84,6 +101,7 @@ function validateEndpointMiddleware(
                 error: result.error.issues,
               });
             }
+            req.query[parameter.name] = result.data as any;
           }
           break;
         case "Header":
@@ -95,6 +113,7 @@ function validateEndpointMiddleware(
                 error: result.error.issues,
               });
             }
+            req.headers[parameter.name] = result.data as any;
           }
           break;
       }
