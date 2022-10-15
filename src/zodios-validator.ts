@@ -123,7 +123,10 @@ export function useValidateParameters(
         (endpoint) => endpoint.method === method && endpoint.path === path
       );
       if (endpoint && endpoint.parameters) {
-        handlers.unshift(validateEndpointMiddleware(endpoint, transform));
+        handlers = [
+          validateEndpointMiddleware(endpoint, transform),
+          ...handlers,
+        ];
       }
       return savedMethod(path, ...handlers);
     };
