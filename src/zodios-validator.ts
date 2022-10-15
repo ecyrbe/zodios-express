@@ -2,9 +2,33 @@ import express from "express";
 import {
   ZodiosEndpointDefinition,
   ZodiosEndpointDefinitions,
+  ZodiosEndpointParameter,
 } from "@zodios/core";
 import { isZodType, withoutTransform } from "./zodios.utils";
 import { z } from "zod";
+
+function validateParam(
+  schema: z.ZodType<any>,
+  parameters: Record<string, unknown>,
+  paramName: string
+) {
+  if (
+    (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
+      isZodType(schema, z.ZodFirstPartyTypeKind.ZodBoolean)) &&
+    parameters[paramName]
+  ) {
+    return z
+      .preprocess((x) => {
+        try {
+          return JSON.parse(x as string);
+        } catch {
+          return x;
+        }
+      }, schema)
+      .safeParse(parameters[paramName]);
+  }
+  return schema.safeParse(parameters[paramName]);
+}
 
 function validateEndpointMiddleware(
   endpoint: ZodiosEndpointDefinition,
@@ -36,30 +60,7 @@ function validateEndpointMiddleware(
           break;
         case "Path":
           {
-            if (
-              (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
-                isZodType(schema, z.ZodFirstPartyTypeKind.ZodBoolean)) &&
-              req.params[parameter.name]
-            ) {
-              const result = z
-                .preprocess((x) => {
-                  try {
-                    return JSON.parse(x as string);
-                  } catch {
-                    return x;
-                  }
-                }, schema)
-                .safeParse(req.params[parameter.name]);
-              if (!result.success) {
-                return res.status(400).json({
-                  context: `path.${parameter.name}`,
-                  error: result.error.issues,
-                });
-              }
-              req.params[parameter.name] = result.data as any;
-              return next();
-            }
-            const result = schema.safeParse(req.params[parameter.name]);
+            const result = validateParam(schema, req.params, parameter.name);
             if (!result.success) {
               return res.status(400).json({
                 context: `path.${parameter.name}`,
@@ -71,30 +72,7 @@ function validateEndpointMiddleware(
           break;
         case "Query":
           {
-            if (
-              (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
-                isZodType(schema, z.ZodFirstPartyTypeKind.ZodBoolean)) &&
-              req.query[parameter.name]
-            ) {
-              const result = z
-                .preprocess((x) => {
-                  try {
-                    return JSON.parse(x as string);
-                  } catch {
-                    return x;
-                  }
-                }, schema)
-                .safeParse(req.query[parameter.name]);
-              if (!result.success) {
-                return res.status(400).json({
-                  context: `query.${parameter.name}`,
-                  error: result.error.issues,
-                });
-              }
-              req.query[parameter.name] = result.data as any;
-              return next();
-            }
-            const result = schema.safeParse(req.query[parameter.name]);
+            const result = validateParam(schema, req.query, parameter.name);
             if (!result.success) {
               return res.status(400).json({
                 context: `query.${parameter.name}`,
