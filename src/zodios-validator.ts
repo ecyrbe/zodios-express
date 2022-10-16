@@ -2,20 +2,16 @@ import express from "express";
 import {
   ZodiosEndpointDefinition,
   ZodiosEndpointDefinitions,
-  ZodiosEndpointParameter,
 } from "@zodios/core";
 import { isZodType, withoutTransform } from "./zodios.utils";
 import { z } from "zod";
 
-function validateParam(
-  schema: z.ZodType<any>,
-  parameters: Record<string, unknown>,
-  paramName: string
-) {
+function validateParam(schema: z.ZodType<any>, parameter: unknown) {
   if (
     (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
       isZodType(schema, z.ZodFirstPartyTypeKind.ZodBoolean)) &&
-    parameters[paramName]
+    parameter &&
+    typeof parameter === "string"
   ) {
     return z
       .preprocess((x) => {
@@ -25,9 +21,9 @@ function validateParam(
           return x;
         }
       }, schema)
-      .safeParse(parameters[paramName]);
+      .safeParse(parameter);
   }
-  return schema.safeParse(parameters[paramName]);
+  return schema.safeParse(parameter);
 }
 
 function validateEndpointMiddleware(
@@ -60,7 +56,7 @@ function validateEndpointMiddleware(
           break;
         case "Path":
           {
-            const result = validateParam(schema, req.params, parameter.name);
+            const result = validateParam(schema, req.params[parameter.name]);
             if (!result.success) {
               return res.status(400).json({
                 context: `path.${parameter.name}`,
@@ -72,7 +68,7 @@ function validateEndpointMiddleware(
           break;
         case "Query":
           {
-            const result = validateParam(schema, req.query, parameter.name);
+            const result = validateParam(schema, req.query[parameter.name]);
             if (!result.success) {
               return res.status(400).json({
                 context: `query.${parameter.name}`,
@@ -106,7 +102,7 @@ function validateEndpointMiddleware(
  * @param router - express router to patch
  * @param transform - whether to transform the data or not
  */
-export function useValidateParameters(
+export function injectParametersValidators(
   api: ZodiosEndpointDefinitions,
   router: express.Router,
   transform: boolean

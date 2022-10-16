@@ -8,7 +8,7 @@ import {
   ZodiosAppOptions,
   ZodiosRouterOptions,
 } from "./zodios.types";
-import { useValidateParameters } from "./zodios-validator";
+import { injectParametersValidators } from "./zodios-validator";
 
 /**
  * create a zodios app based on the given api and express
@@ -33,7 +33,7 @@ export function zodiosApp<
     app.use(express.json());
   }
   if (api && validate) {
-    useValidateParameters(api, app, transform);
+    injectParametersValidators(api, app, transform);
   }
   return app as unknown as ZodiosApp<Api, Context>;
 }
@@ -54,7 +54,7 @@ export function zodiosRouter<
   const { validate = true, transform = false, ...routerOptions } = options;
   const router = options?.router ?? express.Router(routerOptions);
   if (validate) {
-    useValidateParameters(api, router, transform);
+    injectParametersValidators(api, router, transform);
   }
   return router as unknown as ZodiosRouter<Api, Context>;
 }
