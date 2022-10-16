@@ -6,7 +6,7 @@ import {
 import { isZodType, withoutTransform } from "./zodios.utils";
 import { z } from "zod";
 
-function validateParam(schema: z.ZodType<any>, parameter: unknown) {
+async function validateParam(schema: z.ZodType<any>, parameter: unknown) {
   if (
     (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
       isZodType(schema, z.ZodFirstPartyTypeKind.ZodBoolean)) &&
@@ -21,16 +21,16 @@ function validateParam(schema: z.ZodType<any>, parameter: unknown) {
           return x;
         }
       }, schema)
-      .safeParse(parameter);
+      .safeParseAsync(parameter);
   }
-  return schema.safeParse(parameter);
+  return schema.safeParseAsync(parameter);
 }
 
 function validateEndpointMiddleware(
   endpoint: ZodiosEndpointDefinition,
   transform: boolean
 ) {
-  return (
+  return async (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
@@ -44,7 +44,7 @@ function validateEndpointMiddleware(
       switch (parameter.type) {
         case "Body":
           {
-            const result = schema.safeParse(req.body);
+            const result = await schema.safeParseAsync(req.body);
             if (!result.success) {
               return res.status(400).json({
                 context: "body",
@@ -56,7 +56,10 @@ function validateEndpointMiddleware(
           break;
         case "Path":
           {
-            const result = validateParam(schema, req.params[parameter.name]);
+            const result = await validateParam(
+              schema,
+              req.params[parameter.name]
+            );
             if (!result.success) {
               return res.status(400).json({
                 context: `path.${parameter.name}`,
@@ -68,7 +71,10 @@ function validateEndpointMiddleware(
           break;
         case "Query":
           {
-            const result = validateParam(schema, req.query[parameter.name]);
+            const result = await validateParam(
+              schema,
+              req.query[parameter.name]
+            );
             if (!result.success) {
               return res.status(400).json({
                 context: `query.${parameter.name}`,
@@ -80,7 +86,9 @@ function validateEndpointMiddleware(
           break;
         case "Header":
           {
-            const result = parameter.schema.safeParse(req.get(parameter.name));
+            const result = await parameter.schema.safeParseAsync(
+              req.get(parameter.name)
+            );
             if (!result.success) {
               return res.status(400).json({
                 context: `header.${parameter.name}`,
