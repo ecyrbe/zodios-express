@@ -6,6 +6,8 @@ import {
 import { isZodType, withoutTransform } from "./zodios.utils";
 import { z } from "zod";
 
+const METHODS = ["get", "post", "put", "patch", "delete"] as const;
+
 async function validateParam(schema: z.ZodType<any>, parameter: unknown) {
   if (
     (isZodType(schema, z.ZodFirstPartyTypeKind.ZodNumber) ||
@@ -115,8 +117,7 @@ export function injectParametersValidators(
   router: express.Router,
   transform: boolean
 ) {
-  const methods = ["get", "post", "put", "patch", "delete"] as const;
-  for (let method of methods) {
+  for (let method of METHODS) {
     const savedMethod = router[method].bind(router);
     // @ts-ignore
     router[method] = (path: string, ...handlers: any[]) => {
