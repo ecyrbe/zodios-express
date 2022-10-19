@@ -5,7 +5,7 @@ import { Zodios } from "@zodios/core";
 import { ZodiosHooks } from "@zodios/react";
 import styles from "../styles/Home.module.css";
 import { userApi } from "../common/api";
-import { QueryClientProvider, QueryClient } from "react-query";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 const queryClient = new QueryClient();

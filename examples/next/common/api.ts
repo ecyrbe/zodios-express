@@ -1,5 +1,5 @@
 import z from "zod";
-import { asApi } from "@zodios/core";
+import { makeApi } from "@zodios/core";
 
 const user = z.object({
   id: z.number(),
@@ -8,7 +8,7 @@ const user = z.object({
   email: z.string().email(),
 });
 
-export const userApi = asApi([
+export const userApi = makeApi([
   {
     method: "get",
     path: "/users",
