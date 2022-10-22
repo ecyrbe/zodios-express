@@ -1,8 +1,9 @@
 {
   "name": "@zodios/express",
   "description": "Typescript express server",
-  "version": "10.0.5",
+  "version": "10.2.0",
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
@@ -26,7 +27,11 @@
   "scripts": {
     "prebuild": "rimraf lib",
     "example": "ts-node examples/jsonplaceholder.ts",
-    "build": "tsc -p tsconfig.build.json",
+    "major-rc": "npm version premajor --preid=rc",
+    "minor-rc": "npm version preminor --preid=rc",
+    "patch-rc": "npm version prepatch --preid=rc",
+    "rc": "npm version prerelease --preid=rc",
+    "build": "tsup",
     "test": "jest --coverage"
   },
   "peerDependencies": {
@@ -48,6 +53,7 @@
     "supertest": "6.3.0",
     "ts-jest": "29.0.3",
     "ts-node": "10.9.1",
+    "tsup": "^6.3.0",
     "typescript": "4.8.4",
     "zod": "3.19.1"
   },
