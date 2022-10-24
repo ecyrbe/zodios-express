@@ -316,20 +316,20 @@
     "@typescript-eslint/types" "5.35.1"
     eslint-visitor-keys "^3.3.0"
 
-"@zodios/core@10.1.0":
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-10.1.0.tgz#7103abdf9995e8eb808edcd7c06e00df180ab4e9"
-  integrity sha512-PAdL3WUWTt6F6yX6dhzAXSc0GSVt6v9v4TuOWK1PNyqaed5RbBqoMw1DXaM7yPqUcPg0cj3Z3aLRP/zOswcyMg==
+"@zodios/core@10.3.1":
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-10.3.1.tgz#ee49521b768efb1d16e8cbc3123fc0f2252342e8"
+  integrity sha512-UQRtwj9natPT+NXXzJc5xO4N/XvZXfP1MpJ5FOcw43RPac50aH32pVBhx47SAPjpz1fMLCDrg7MEW9cXlMPiXA==
 
-"@zodios/express@10.0.5":
-  version "10.0.5"
-  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-10.0.5.tgz#eeace7f0f0d42ca453d1cdf3901e1de7eb38d022"
-  integrity sha512-EAHe30Zux1Y2WlsfaKryrBUBqONzjRAQ/tXxWjG3py5IjXjHOOoVkDTpqEVe2uBMCBk5l65V7Ob/VeF31iAPIQ==
+"@zodios/express@10.3.2":
+  version "10.3.2"
+  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-10.3.2.tgz#de1b68a8b2906143be67ef63619f38f24cae5112"
+  integrity sha512-OTLufS8VRRmt1XO9z8GQpWTUutDXRhX5LimzQX+1x+W4juz61uTkVLdIdYLaDXxpIkLh7RUi+/msp4kC4GeXcw==
 
-"@zodios/react@10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@zodios/react/-/react-10.0.1.tgz#4f94b6a91c30fd70a096b3497391f2d19df68eab"
-  integrity sha512-9UyEKJXeYpitpgUg0T/er/NYv4s4WidOUx70GiLBcoha9pumDLYWm4Lde/2hxcRFQPbV5Ab3877ZU7nXyycbSw==
+"@zodios/react@10.3.3":
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/@zodios/react/-/react-10.3.3.tgz#3395687fe3da59aee62739e9db50bafebc3fee4b"
+  integrity sha512-QAnlZVowIlSa0ezQtjr5wI84lJK7HifBtMTxmaEUiwrlOespdsz39IuojwUB+3G66kGTSbZLQcOhBPsiFPCvpQ==
 
 accepts@~1.3.8:
   version "1.3.8"
