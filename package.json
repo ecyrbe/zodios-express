@@ -42,6 +42,7 @@
     "test": "jest --coverage"
   },
   "peerDependencies": {
+    "express": "4.x",
     "@zodios/core": "^10.x",
     "zod": "^3.x"
   },
