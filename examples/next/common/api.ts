@@ -19,6 +19,13 @@ export const userApi = makeApi([
     method: "get",
     path: "/users/:id",
     alias: "getUser",
+    parameters: [
+      {
+        name: "id",
+        type: "Path",
+        schema: z.number().positive(),
+      },
+    ],
     response: user,
     errors: [
       {

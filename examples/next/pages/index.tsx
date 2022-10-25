@@ -1,16 +1,8 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { Zodios } from "@zodios/core";
-import { ZodiosHooks } from "@zodios/react";
-import styles from "../styles/Home.module.css";
-import { userApi } from "../common/api";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-
-const queryClient = new QueryClient();
-const userClientApi = new Zodios("/api", userApi);
-const userClientHooks = new ZodiosHooks("users", userClientApi);
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { userClientHooks } from "../client/api";
 
 const Users = () => {
   const [count, setCount] = useState(1);
@@ -55,17 +47,15 @@ const Users = () => {
 
 const Home: NextPage = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className={styles.container}>
-        <Head>
-          <title>Zodios Example App</title>
-          <meta name="description" content="Zodios app" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <h1>Users</h1>
-        <Users />
-      </div>
-    </QueryClientProvider>
+    <div className={styles.container}>
+      <Head>
+        <title>Zodios Example App</title>
+        <meta name="description" content="Zodios app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <h1>Users</h1>
+      <Users />
+    </div>
   );
 };
 

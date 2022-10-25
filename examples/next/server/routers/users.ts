@@ -13,10 +13,10 @@ const users = [
 export const userRouter = ctx.router(userApi);
 
 userRouter.get("/users", (req, res) => {
-  res.status(200).json(users);
+  return res.status(200).json(users);
 });
 
-userRouter.get("/users/:id", (req, res, next) => {
+userRouter.get("/users/:id", (req, res) => {
   const user = users.find((u) => u.id === req.params.id);
   if (!user) {
     return res.status(404).json({
@@ -33,5 +33,5 @@ userRouter.post("/users", (req, res) => {
   const id = users.length + 1;
   const user = { ...req.body, id };
   users.push(user);
-  res.status(201).json(user);
+  return res.status(201).json(user);
 });
