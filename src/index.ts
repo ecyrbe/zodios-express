@@ -4,6 +4,8 @@ export {
   zodiosNextApp,
   zodiosContext,
 } from "./zodios";
+export type { ZodiosContext } from "./zodios";
+
 export type {
   ZodiosApp,
   ZodiosRouter,

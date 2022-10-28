@@ -67,31 +67,37 @@ export function zodiosRouter<
 export function zodiosNextApp<
   Api extends ZodiosEndpointDefinitions = any,
   Context extends ZodObject<any> = ZodObject<any>
->(api?: Narrow<Api>, options: ZodiosAppOptions<Context> = {}) {
-  return zodiosApp(api, { ...options, enableJsonBodyParser: false });
+>(
+  api?: Narrow<Api>,
+  options: ZodiosAppOptions<Context> = {}
+): ZodiosApp<Api, Context> {
+  return zodiosApp(api, {
+    ...options,
+    enableJsonBodyParser: false,
+  });
 }
 
-class ZodiosContext<Context extends ZodObject<any>> {
+export class ZodiosContext<Context extends ZodObject<any>> {
   constructor(public context?: Context) {}
 
   app<Api extends ZodiosEndpointDefinitions = any>(
     api?: Narrow<Api>,
     options: ZodiosAppOptions<Context> = {}
-  ) {
+  ): ZodiosApp<Api, Context> {
     return zodiosApp<Api, Context>(api, options);
   }
 
   nextApp<Api extends ZodiosEndpointDefinitions = any>(
     api?: Narrow<Api>,
     options: ZodiosAppOptions<Context> = {}
-  ) {
+  ): ZodiosApp<Api, Context> {
     return zodiosNextApp<Api, Context>(api, options);
   }
 
   router<Api extends ZodiosEndpointDefinitions>(
     api: Narrow<Api>,
     options?: RouterOptions & ZodiosRouterOptions<Context>
-  ) {
+  ): ZodiosRouter<Api, Context> {
     return zodiosRouter<Api, Context>(api, options);
   }
 }
