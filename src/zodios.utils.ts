@@ -38,8 +38,14 @@ export function isZodType(
   if (t._def?.typeName === type) {
     return true;
   }
-  if (t._def?.typeName === z.ZodFirstPartyTypeKind.ZodEffects) {
+  if (
+    t._def?.typeName === z.ZodFirstPartyTypeKind.ZodEffects &&
+    (t as z.ZodEffects<any>)._def.effect.type === "refinement"
+  ) {
     return isZodType((t as z.ZodEffects<any>).innerType(), type);
+  }
+  if (t._def?.innerType) {
+    return isZodType(t._def?.innerType, type);
   }
   return false;
 }
