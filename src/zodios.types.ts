@@ -13,13 +13,24 @@ import {
 import { IfEquals } from "@zodios/core/lib/utils.types";
 import { z, ZodAny, ZodObject } from "zod";
 
-type SucessCodes = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
+export type ZodiosSucessCodes =
+  | 200
+  | 201
+  | 202
+  | 203
+  | 204
+  | 205
+  | 206
+  | 207
+  | 208
+  | 226;
 
-type WithContext<T, Context extends ZodObject<any>> = Context extends ZodAny
-  ? T
-  : T & z.infer<Context>;
+export type WithZodiosContext<
+  T,
+  Context extends ZodObject<any>
+> = Context extends ZodAny ? T : T & z.infer<Context>;
 
-export interface RequestHandler<
+export interface ZodiosRequestHandler<
   Api extends ZodiosEndpointDefinitions,
   Context extends ZodObject<any>,
   M extends Method,
@@ -30,7 +41,10 @@ export interface RequestHandler<
   Res = ZodiosResponseByPath<Api, M, Path>
 > {
   (
-    req: WithContext<express.Request<ReqPath, Res, ReqBody, ReqQuery>, Context>,
+    req: WithZodiosContext<
+      express.Request<ReqPath, Res, ReqBody, ReqQuery>,
+      Context
+    >,
     res: Omit<express.Response<Res>, "status"> & {
       // rebind context to allow for type inference
       status<
@@ -40,7 +54,7 @@ export interface RequestHandler<
         PATH extends ZodiosPathsByMethod<Api, M> = Path
       >(
         status: StatusCode
-      ): StatusCode extends SucessCodes
+      ): StatusCode extends ZodiosSucessCodes
         ? express.Response<Res>
         : express.Response<ZodiosErrorByPath<API, METHOD, PATH, StatusCode>>;
     },
@@ -48,9 +62,11 @@ export interface RequestHandler<
   ): void;
 }
 
-export interface ContextRequestHandler<Context extends ZodObject<any>> {
+export interface ZodiosRouterContextRequestHandler<
+  Context extends ZodObject<any>
+> {
   (
-    req: WithContext<express.Request, Context>,
+    req: WithZodiosContext<express.Request, Context>,
     res: express.Response,
     next: express.NextFunction
   ): void;
@@ -63,14 +79,20 @@ export type ZodiosHandler<
   M extends Method
 > = <Path extends ZodiosPathsByMethod<Api, M>>(
   path: Path,
-  ...handlers: Array<RequestHandler<Api, Context, M, Path>>
+  ...handlers: Array<ZodiosRequestHandler<Api, Context, M, Path>>
 ) => Router;
 
 export interface ZodiosUse<Context extends ZodObject<any>> {
-  use(...handlers: Array<ContextRequestHandler<Context>>): this;
-  use(handlers: Array<ContextRequestHandler<Context>>): this;
-  use(path: string, ...handlers: Array<ContextRequestHandler<Context>>): this;
-  use(path: string, handlers: Array<ContextRequestHandler<Context>>): this;
+  use(...handlers: Array<ZodiosRouterContextRequestHandler<Context>>): this;
+  use(handlers: Array<ZodiosRouterContextRequestHandler<Context>>): this;
+  use(
+    path: string,
+    ...handlers: Array<ZodiosRouterContextRequestHandler<Context>>
+  ): this;
+  use(
+    path: string,
+    handlers: Array<ZodiosRouterContextRequestHandler<Context>>
+  ): this;
 }
 
 export interface ZodiosHandlers<
@@ -138,8 +160,8 @@ export type ZodiosRouter<
   any,
   Omit<ReturnType<typeof express.Router>, "use"> &
     ZodiosUse<Context> &
-    ContextRequestHandler<Context>,
+    ZodiosRouterContextRequestHandler<Context>,
   Omit<ReturnType<typeof express.Router>, Method | "use"> &
     ZodiosHandlers<Api, Context> &
-    ContextRequestHandler<Context>
+    ZodiosRouterContextRequestHandler<Context>
 >;

@@ -8,8 +8,15 @@ export type { ZodiosContext } from "./zodios";
 
 export type {
   ZodiosApp,
-  ZodiosRouter,
   ZodiosAppOptions,
-  ZodiosRouterOptions,
+  ZodiosHandler,
   ZodiosHandlers,
+  ZodiosRequestHandler,
+  ZodiosRouter,
+  ZodiosRouterOptions,
+  ZodiosRouterContextRequestHandler,
+  ZodiosValidationOptions,
+  ZodiosUse,
+  ZodiosSucessCodes,
+  WithZodiosContext,
 } from "./zodios.types";
