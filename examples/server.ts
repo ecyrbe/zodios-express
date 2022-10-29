@@ -14,6 +14,11 @@ const userApi = makeApi([
         type: "Path",
         schema: z.number(),
       },
+      {
+        name: "filter",
+        type: "Query",
+        schema: z.string().array().default([]),
+      },
     ],
     response: z.object({
       id: z.number(),
@@ -26,7 +31,9 @@ const app = zodiosApp(userApi);
 
 app.get("/users/:id", async (req, res) => {
   const { id } = req.params;
-  //      ^?
+  //       ^?
+  const { filter } = req.query;
+  //       ^?
   return res.json({
     id: req.params.id,
     name: "example",

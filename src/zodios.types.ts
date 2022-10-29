@@ -35,10 +35,10 @@ export interface ZodiosRequestHandler<
   Context extends ZodObject<any>,
   M extends Method,
   Path extends ZodiosPathsByMethod<Api, M>,
-  ReqPath = ZodiosPathParamsByPath<Api, M, Path>,
-  ReqBody = ZodiosBodyByPath<Api, M, Path>,
-  ReqQuery = ZodiosQueryParamsByPath<Api, M, Path>,
-  Res = ZodiosResponseByPath<Api, M, Path>
+  ReqPath = ZodiosPathParamsByPath<Api, M, Path, false>,
+  ReqBody = ZodiosBodyByPath<Api, M, Path, false>,
+  ReqQuery = ZodiosQueryParamsByPath<Api, M, Path, false>,
+  Res = ZodiosResponseByPath<Api, M, Path, false>
 > {
   (
     req: WithZodiosContext<
@@ -56,7 +56,9 @@ export interface ZodiosRequestHandler<
         status: StatusCode
       ): StatusCode extends ZodiosSucessCodes
         ? express.Response<Res>
-        : express.Response<ZodiosErrorByPath<API, METHOD, PATH, StatusCode>>;
+        : express.Response<
+            ZodiosErrorByPath<API, METHOD, PATH, StatusCode, false>
+          >;
     },
     next: express.NextFunction
   ): void;
