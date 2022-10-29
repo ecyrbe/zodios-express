@@ -325,15 +325,15 @@
     "@typescript-eslint/types" "5.35.1"
     eslint-visitor-keys "^3.3.0"
 
-"@zodios/core@10.3.1":
-  version "10.3.1"
-  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-10.3.1.tgz#ee49521b768efb1d16e8cbc3123fc0f2252342e8"
-  integrity sha512-UQRtwj9natPT+NXXzJc5xO4N/XvZXfP1MpJ5FOcw43RPac50aH32pVBhx47SAPjpz1fMLCDrg7MEW9cXlMPiXA==
+"@zodios/core@10.4.3":
+  version "10.4.3"
+  resolved "https://registry.yarnpkg.com/@zodios/core/-/core-10.4.3.tgz#f9bcf3fa2a6e9cb3f43ca4f3a89b6ffad9407ebd"
+  integrity sha512-ejXyMMX8lOELFOlfsCpuHYhAE37UhCYKXBi75ifaWtObvdxuO2kcex5X2B6UOi6wmUKpcKOgbwlSZ96uZP53Fg==
 
-"@zodios/express@10.3.2":
-  version "10.3.2"
-  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-10.3.2.tgz#de1b68a8b2906143be67ef63619f38f24cae5112"
-  integrity sha512-OTLufS8VRRmt1XO9z8GQpWTUutDXRhX5LimzQX+1x+W4juz61uTkVLdIdYLaDXxpIkLh7RUi+/msp4kC4GeXcw==
+"@zodios/express@10.4.2":
+  version "10.4.2"
+  resolved "https://registry.yarnpkg.com/@zodios/express/-/express-10.4.2.tgz#ee89c2969fbf547ee0e32764691dda662578dfba"
+  integrity sha512-s8hxGlVQZHpArPKFbnXbecj/HqTnbOOnYRIHgKBFbZouq9jhh41rmw9hxmTqjnMI6nK6U5gVkkN8u36OPBsyRQ==
 
 "@zodios/react@10.3.3":
   version "10.3.3"
