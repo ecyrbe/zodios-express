@@ -1,5 +1,5 @@
 {
   "extends": ["config:base"],
   "ignorePaths": ["examples/**"],
-  "ignoreDeps": ["form-data-encoder", "formdata-node"]
+  "ignoreDeps": ["tsup"]
 }
