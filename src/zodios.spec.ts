@@ -288,19 +288,17 @@ describe("router", () => {
     });
     const req = request(app);
     const result = await req.get("/users?limit=0").expect(400);
-    expect(result.body).toEqual({
-      context: "query.limit",
-      error: [
-        {
-          code: "too_small",
-          inclusive: true,
-          message: "Number must be greater than or equal to 1",
-          minimum: 1,
-          path: [],
-          type: "number",
-        },
-      ],
-    });
+    expect(result.body.context).toEqual("query.limit");
+    expect(result.body.error).toEqual([
+      expect.objectContaining({
+        code: "too_small",
+        inclusive: true,
+        message: "Number must be greater than or equal to 1",
+        minimum: 1,
+        path: [],
+        type: "number",
+      }),
+    ]);
   });
   it("should create a user", async () => {
     const app = zodiosContext().app(userApi);
