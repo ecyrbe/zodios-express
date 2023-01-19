@@ -69,10 +69,10 @@ Here is an example of API declaration with Zodios.
 in a common directory (ex: `src/common/api.ts`) :
 
 ```typescript
-import { asApi } from "@zodios/core";
+import { makeApi } from "@zodios/core";
 import { z } from "zod";
 
-const userApi = asApi([
+const userApi = makeApi([
   {
     method: "get",
     path: "/users/:id", // auto detect :id and ask for it in apiClient get params
@@ -146,11 +146,11 @@ app.listen(3000);
 Zodios express can infer the status code to match your API error response and also have your errors correctly typed.
 
 ```typescript
-import { asApi } from "@zodios/core";
+import { makeApi } from "@zodios/core";
 import { zodiosApp } from "@zodios/express";
 import { z } from "zod";
 
-const userApi = asApi([
+const userApi = makeApi([
   {
     method: "get",
     path: "/users/:id", // auto detect :id and ask for it in apiClient get params
