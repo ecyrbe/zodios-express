@@ -5,6 +5,7 @@ export {
   zodiosContext,
 } from "./zodios";
 export type { ZodiosContext } from "./zodios";
+export { prefixApi } from "./zodios.utils";
 
 export type {
   ZodiosApp,
