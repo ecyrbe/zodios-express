@@ -64,16 +64,6 @@ export interface ZodiosRequestHandler<
   ): void;
 }
 
-export interface ZodiosRouterContextRequestHandler<
-  Context extends ZodObject<any>
-> {
-  (
-    req: WithZodiosContext<express.Request, Context>,
-    res: express.Response,
-    next: express.NextFunction
-  ): void;
-}
-
 export type ZodiosHandler<
   Router,
   Context extends ZodObject<any>,
@@ -84,9 +74,24 @@ export type ZodiosHandler<
   ...handlers: Array<ZodiosRequestHandler<Api, Context, M, Path>>
 ) => Router;
 
+export type ZodiosRouterContextRequestHandler<Context extends ZodObject<any>> =
+  (
+    req: WithZodiosContext<express.Request, Context>,
+    res: express.Response,
+    next: express.NextFunction
+  ) => void;
+
+export type ZodiosRouterContextErrorHandler<Context extends ZodObject<any>> = (
+  error: any,
+  req: WithZodiosContext<express.Request, Context>,
+  res: express.Response,
+  next: express.NextFunction
+) => void;
+
 export interface ZodiosUse<Context extends ZodObject<any>> {
   use(...handlers: Array<ZodiosRouterContextRequestHandler<Context>>): this;
   use(handlers: Array<ZodiosRouterContextRequestHandler<Context>>): this;
+  use(errorHandler: ZodiosRouterContextErrorHandler<Context>): this;
   use(
     path: string,
     ...handlers: Array<ZodiosRouterContextRequestHandler<Context>>
