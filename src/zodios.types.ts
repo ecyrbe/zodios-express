@@ -13,7 +13,7 @@ import {
 import { IfEquals } from "@zodios/core/lib/utils.types";
 import { z, ZodAny, ZodObject } from "zod";
 
-export type ZodiosSucessCodes =
+export type ZodiosSuccessCodes =
   | 200
   | 201
   | 202
@@ -54,7 +54,7 @@ export interface ZodiosRequestHandler<
         PATH extends ZodiosPathsByMethod<Api, M> = Path
       >(
         status: StatusCode
-      ): StatusCode extends ZodiosSucessCodes
+      ): StatusCode extends ZodiosSuccessCodes
         ? express.Response<Res>
         : express.Response<
             ZodiosErrorByPath<API, METHOD, PATH, StatusCode, false>
