@@ -18,6 +18,6 @@ export type {
   ZodiosRouterContextRequestHandler,
   ZodiosValidationOptions,
   ZodiosUse,
-  ZodiosSucessCodes,
+  ZodiosSuccessCodes,
   WithZodiosContext,
 } from "./zodios.types";
