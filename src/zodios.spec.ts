@@ -59,6 +59,27 @@ const userApi = apiBuilder({
     errors,
   })
   .addEndpoint({
+    method: "get",
+    path: "/objects/:id",
+    parameters: [
+      {
+        name: "test",
+        type: "Query",
+        schema: z.object({
+          test: z.string(),
+        }),
+      },
+      {
+        name: "id",
+        type: "Path",
+        schema: z.string(),
+      },
+    ],
+    response: z.object({
+      test: z.string(),
+    }),
+  })
+  .addEndpoint({
     method: "post",
     path: "/users",
     parameters: [
@@ -169,6 +190,22 @@ describe("router", () => {
         email: "test@domain.com",
       },
     ]);
+  });
+
+  it("should infer objects in query params", async () => {
+    const app = zodiosContext().app(userApi);
+    app.get("/objects/:id", (req, res, next) => {
+      res.json(req.query.test);
+    });
+    const req = request(app);
+    // passing a stringified object
+    const result1 = await req.get(
+      "/objects/hello?test=%7B%22test%22%3A%22test%22%7D"
+    );
+    expect(result1.statusCode).toBe(200);
+    expect(result1.body).toEqual({
+      test: "test",
+    });
   });
 
   it("should not find user if id>10", async () => {
