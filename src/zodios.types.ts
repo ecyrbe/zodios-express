@@ -88,6 +88,17 @@ export type ZodiosRouterContextErrorHandler<Context extends ZodObject<any>> = (
   next: express.NextFunction
 ) => void;
 
+export type ZodiosRouterValidationErrorHandler<Context extends ZodObject<any>> =
+  (
+    error: {
+      context: string;
+      error: z.ZodIssue[];
+    },
+    req: WithZodiosContext<express.Request, Context>,
+    res: express.Response,
+    next: express.NextFunction
+  ) => void;
+
 export interface ZodiosUse<Context extends ZodObject<any>> {
   use(...handlers: Array<ZodiosRouterContextRequestHandler<Context>>): this;
   use(handlers: Array<ZodiosRouterContextRequestHandler<Context>>): this;
@@ -137,6 +148,7 @@ export interface ZodiosAppOptions<Context extends ZodObject<any>>
    */
   enableJsonBodyParser?: boolean;
   context?: Context;
+  validationErrorHandler?: ZodiosRouterValidationErrorHandler<Context>;
 }
 
 export interface ZodiosRouterOptions<Context extends ZodObject<any>>
@@ -146,6 +158,7 @@ export interface ZodiosRouterOptions<Context extends ZodObject<any>>
    */
   router?: ReturnType<typeof express.Router>;
   context?: Context;
+  validationErrorHandler?: ZodiosRouterValidationErrorHandler<Context>;
 }
 
 export type ZodiosApp<

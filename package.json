@@ -43,11 +43,12 @@
     "test": "jest --coverage"
   },
   "peerDependencies": {
-    "express": "4.x",
     "@zodios/core": ">=10.4.4 <11.0.0",
+    "express": "4.x",
     "zod": "^3.x"
   },
   "devDependencies": {
+    "@jest/types": "^29.5.0",
     "@types/express": "4.17.17",
     "@types/jest": "29.5.0",
     "@types/node": "18.15.11",
@@ -63,6 +64,5 @@
     "tsup": "6.3.0",
     "typescript": "5.0.3",
     "zod": "3.21.4"
-  },
-  "dependencies": {}
+  }
 }
