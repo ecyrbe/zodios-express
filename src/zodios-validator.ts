@@ -4,7 +4,8 @@ import {
   ZodiosEndpointDefinitions,
 } from "@zodios/core";
 import { isZodType, withoutTransform } from "./zodios.utils";
-import { z } from "zod";
+import { z, ZodObject } from "zod";
+import { ZodiosRouterValidationErrorHandler } from "./zodios.types";
 
 const METHODS = ["get", "post", "put", "patch", "delete"] as const;
 
@@ -47,7 +48,7 @@ function validateEndpointMiddleware(
           {
             const result = await schema.safeParseAsync(req.body);
             if (!result.success) {
-              return res.status(400).json({
+              return next({
                 context: "body",
                 error: result.error.issues,
               });
@@ -62,7 +63,7 @@ function validateEndpointMiddleware(
               req.params[parameter.name]
             );
             if (!result.success) {
-              return res.status(400).json({
+              return next({
                 context: `path.${parameter.name}`,
                 error: result.error.issues,
               });
@@ -77,7 +78,7 @@ function validateEndpointMiddleware(
               req.query[parameter.name]
             );
             if (!result.success) {
-              return res.status(400).json({
+              return next({
                 context: `query.${parameter.name}`,
                 error: result.error.issues,
               });
@@ -91,7 +92,7 @@ function validateEndpointMiddleware(
               req.get(parameter.name)
             );
             if (!result.success) {
-              return res.status(400).json({
+              return next({
                 context: `header.${parameter.name}`,
                 error: result.error.issues,
               });
@@ -111,10 +112,11 @@ function validateEndpointMiddleware(
  * @param router - express router to patch
  * @param transform - whether to transform the data or not
  */
-export function injectParametersValidators(
+export function injectParametersValidators<Context extends ZodObject<any>>(
   api: ZodiosEndpointDefinitions,
   router: express.Router,
-  transform: boolean
+  transform: boolean,
+  validationErrorHandler: ZodiosRouterValidationErrorHandler<Context>
 ) {
   for (let method of METHODS) {
     const savedMethod = router[method].bind(router);
@@ -126,6 +128,7 @@ export function injectParametersValidators(
       if (endpoint && endpoint.parameters) {
         handlers = [
           validateEndpointMiddleware(endpoint, transform),
+          validationErrorHandler,
           ...handlers,
         ];
       }

@@ -1,5 +1,5 @@
 import express, { RouterOptions } from "express";
-import { ZodObject } from "zod";
+import { z, ZodObject } from "zod";
 import { ZodiosEndpointDefinitions } from "@zodios/core";
 import { Narrow } from "@zodios/core/lib/utils.types";
 import {
@@ -7,6 +7,7 @@ import {
   ZodiosRouter,
   ZodiosAppOptions,
   ZodiosRouterOptions,
+  WithZodiosContext,
 } from "./zodios.types";
 import { injectParametersValidators } from "./zodios-validator";
 
@@ -28,12 +29,13 @@ export function zodiosApp<
     enableJsonBodyParser = true,
     validate = true,
     transform = false,
+    validationErrorHandler = defaultErrorHandler,
   } = options;
   if (enableJsonBodyParser) {
     app.use(express.json());
   }
   if (api && validate) {
-    injectParametersValidators(api, app, transform);
+    injectParametersValidators(api, app, transform, validationErrorHandler);
   }
   return app as unknown as ZodiosApp<Api, Context>;
 }
@@ -51,10 +53,15 @@ export function zodiosRouter<
   api: Narrow<Api>,
   options: RouterOptions & ZodiosRouterOptions<Context> = {}
 ): ZodiosRouter<Api, Context> {
-  const { validate = true, transform = false, ...routerOptions } = options;
+  const {
+    validate = true,
+    transform = false,
+    validationErrorHandler = defaultErrorHandler,
+    ...routerOptions
+  } = options;
   const router = options?.router ?? express.Router(routerOptions);
   if (validate) {
-    injectParametersValidators(api, router, transform);
+    injectParametersValidators(api, router, transform, validationErrorHandler);
   }
   return router as unknown as ZodiosRouter<Api, Context>;
 }
@@ -106,4 +113,16 @@ export function zodiosContext<Context extends ZodObject<any> = ZodObject<any>>(
   context?: Context
 ): ZodiosContext<Context> {
   return new ZodiosContext(context);
+}
+
+export function defaultErrorHandler<Context extends ZodObject<any>>(
+  err: {
+    context: string;
+    error: z.ZodIssue[];
+  },
+  req: WithZodiosContext<express.Request, Context>,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  res.status(400).json(err);
 }
