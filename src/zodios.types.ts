@@ -1,4 +1,5 @@
-import express from "express";
+import http from "http";
+import express, { Request, Response } from "express";
 import {
   ZodiosEndpointDefinitions,
   ZodiosEndpointDefinition,
@@ -161,16 +162,30 @@ export interface ZodiosRouterOptions<Context extends ZodObject<any>>
   validationErrorHandler?: ZodiosRouterValidationErrorHandler<Context>;
 }
 
+export interface ZodiosUnknownApp<Context extends ZodObject<any>>
+  extends Omit<ReturnType<typeof express>, "use">,
+    ZodiosUse<Context> {
+  (
+    req: Request | http.IncomingMessage,
+    res: Response | http.ServerResponse
+  ): any;
+}
+
+export interface ZodiosApiApp<
+  Api extends ZodiosEndpointDefinition[],
+  Context extends ZodObject<any>
+> extends Omit<ReturnType<typeof express>, Method | "use">,
+    ZodiosHandlers<Api, Context> {
+  (
+    req: Request | http.IncomingMessage,
+    res: Response | http.ServerResponse
+  ): any;
+}
+
 export type ZodiosApp<
   Api extends ZodiosEndpointDefinitions,
   Context extends ZodObject<any>
-> = IfEquals<
-  Api,
-  any,
-  Omit<ReturnType<typeof express>, "use"> & ZodiosUse<Context>,
-  Omit<ReturnType<typeof express>, Method | "use"> &
-    ZodiosHandlers<Api, Context>
->;
+> = IfEquals<Api, any, ZodiosUnknownApp<Context>, ZodiosApiApp<Api, Context>>;
 
 export type ZodiosRouter<
   Api extends ZodiosEndpointDefinitions,
