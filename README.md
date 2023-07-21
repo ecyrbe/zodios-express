@@ -133,7 +133,7 @@ You can use the `zodiosRouter` to do that with a `zodiosApp` without APIs attach
 ```typescript
 import { zodiosApp, zodiosRouter } from "@zodios/express";
 
-const app = zodiosApp(); // just an axpess app with type annotations
+const app = zodiosApp(); // just an expess app with type annotations
 const userRouter = zodiosRouter(userApi); // just an express router with type annotations and validation middlewares
 const adminRouter = zodiosRouter(adminApi); // just an express router with type annotations and validation middlewares
 
